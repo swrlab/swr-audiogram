@@ -4,7 +4,8 @@ var express = require('express'),
 	path = require('path'),
 	multer = require('multer'),
 	uuid = require('uuid'),
-	mkdirp = require('mkdirp');
+	mkdirp = require('mkdirp'),
+	package = require('../package.json');
 
 // Routes and middleware
 var logger = require('../lib/logger/'),
@@ -20,6 +21,34 @@ var app = express();
 logger.log('Starting audiogram');
 app.use(compression());
 // app.use(logger.morgan());
+
+// middleware for pre-processing
+app.use(function (req, res, next) {
+	// upgrade http requests to https
+	if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] == 'http') {
+		return res.redirect(301, 'https://' + req.headers['host'] + req.url);
+	}
+
+	// enable HSTS header if not local
+	//process.env.STAGE != 'dev' ? res.set('Strict-Transport-Security', 'max-age=31557600') : null;
+
+	// adding basic XSS and other security features
+	res.set('X-Content-Type-Options', 'nosniff');
+	res.set('X-Frame-Options', 'SAMEORIGIN');
+	res.set('X-XSS-Protection', '1');
+
+	// build and updateservice name
+	res.set('swr-service', 'swr-audiogram');
+
+	// insert version number
+	res.set('swr-version', package.version);
+
+	// log request
+	process.env.STAGE == 'dev' ? console.log(req.method, req.originalUrl) : null;
+
+	// continue with normal pipeline
+	next();
+});
 
 // Options for where to store uploaded audio and max size
 var fileOptions = {
