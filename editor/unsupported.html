@@ -50,5 +50,21 @@ body {
 <div id="error2">Dieser Browser wird aktuell nicht unterstützt. Bitte mit dem Google Chrome Browser versuchen.</div>
 <div id="error4">Im Zweifelsfall bitte <a href="mailto:lab@swr.de">lab@swr.de</a> kontaktieren.</div>
 <div style="clear:both;"></div>
+
+<script type="text/javascript">
+	var supportedBrowser = true;
+	var browserWarning = false;
+	var userAgent = navigator.userAgent;
+	if (userAgent.indexOf('Chrome') === -1) {
+		supportedBrowser = false;
+	} else {
+		var version = +userAgent.split('Chrome/')[1].split('.')[0];
+		if (version < 46) browserWarning = true;
+		if (version < 44) supportedBrowser = false;
+	}
+	if (supportedBrowser) {
+		window.location.replace('/');
+	}
+</script>
 </body>
 </html>
