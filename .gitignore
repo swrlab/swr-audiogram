@@ -12,3 +12,4 @@ keys/
 core
 core.*
 export/
+settings.json
