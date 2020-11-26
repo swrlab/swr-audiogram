@@ -23,7 +23,6 @@ module.exports = {
 	workingDirectory: path.join(__dirname, '..', 'tmp'),
 	storagePath: path.join(__dirname, '..', 'export'),
 	redisHost: settings.REDIS_HOST,
-	worker: settings.REDIS_HOST ? true : false,
 	fonts: [
 		{ family: 'Source Sans Pro', file: path.join(__dirname, 'fonts', 'SourceSansPro-Regular.ttf') },
 		{
