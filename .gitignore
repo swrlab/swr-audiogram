@@ -8,5 +8,6 @@ media/
 *.log
 .jobs
 settings/backgrounds/
+keys/
 core
 core.*
